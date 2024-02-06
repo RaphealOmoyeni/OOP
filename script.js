@@ -1,18 +1,18 @@
 'use strict';
 
-// const Person = function (firstName, birthYear) {
-//   // Instance properties
-//   this.firstName = firstName;
-//   this.birthYear = birthYear;
+const Person = function (firstName, birthYear) {
+  // Instance properties
+  this.firstName = firstName;
+  this.birthYear = birthYear;
 
-// Never do this
-// this.calcAge = function () {
-//   console.log(2037 - this.birthYear);
-// };
-// };
+  // Never do this
+  // this.calcAge = function () {
+  //   console.log(2037 - this.birthYear);
+  // };
+};
 
-// const jonas = new Person('Jonas', 1991);
-// console.log(jonas);
+const jonas = new Person('Jonas', 1991);
+console.log(jonas);
 // 1. New {} is created
 // 2. function is called, this = {}
 // 3. {} linked to a prptotype
@@ -21,6 +21,13 @@
 // const maltida = new Person('Maltida', 2017);
 // const jack = new Person('Jack', 1975);
 // console.log(maltida, jack);
+
+Person.hey = function () {
+  console.log('Hey there');
+  console.log(this);
+};
+
+Person.hey();
 
 // const jay = 'Jay';
 
@@ -129,6 +136,11 @@ class PersonCl {
   get fullName() {
     return this._fullName;
   }
+
+  // Static method
+  static hey() {
+    console.log('Hey there');
+  }
 }
 
 const jessica = new PersonCl('Jessica Davis', 1996);
@@ -149,7 +161,9 @@ jessica.greet();
 // 2. Classes are first-class citizens
 // 3. Classes are excuted in strict mode
 
-const walter = new PersonCl('Walter', 1965);
+const walter = new PersonCl('Walter James', 1965);
+
+PersonCl.hey();
 
 const account = {
   owner: 'Jonas',
@@ -168,3 +182,60 @@ console.log(account.latest);
 
 account.latest = 50;
 console.log(account.movements);
+
+const PersonProto = {
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  },
+
+  init(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  },
+};
+
+const steven = Object.create(PersonProto);
+console.log(steven);
+
+steven.name = 'Steven';
+steven.birthYear = 2002;
+steven.calcAge();
+
+console.log(steven.__proto__ === PersonProto);
+
+const sarah = Object.create(PersonProto);
+sarah.init('Sarah', 1979);
+sarah.calcAge();
+
+///////////////////////////////////////////////////////////
+// Challenge #2
+
+class CarCl {
+  constructor(carName, carSpeed) {
+    this.carName = carName;
+    this.carSpeed = carSpeed;
+  }
+
+  accelerate() {
+    this.speed = this.carSpeed + 10;
+    console.log(`${this.carName} is going at ${this.carSpeed} km/h`);
+  }
+
+  brake() {
+    this.carSpeed = this.carSpeed - 5;
+    console.log(`${this.carName} is going at ${this.carSpeed} km/h`);
+  }
+
+  get speedUS() {
+    return this.carSpeed / 1.6;
+  }
+
+  set speedUS(speed) {
+    this.carSpeed = speed * 1.6;
+  }
+}
+
+const newCar = new CarCl('Ford', 120);
+console.log(newCar);
+newCar.accelerate();
+newCar.brake();
