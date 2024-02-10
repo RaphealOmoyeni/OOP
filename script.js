@@ -500,3 +500,65 @@ console.log(acc1);
 
 // Chaining
 acc1.deposit(300).deposit(500).withdraw(35).requestLoan(25000).withdraw(4000);
+
+/////////////////////////////////////////////////////////////////////////////
+// Challenge #4  /////////////
+class CarCl {
+  constructor(carName, carSpeed) {
+    this.carName = carName;
+    this.carSpeed = carSpeed;
+  }
+
+  accelerate() {
+    this.carSpeed = this.carSpeed + 10;
+    console.log(`${this.carName} is going at ${this.carSpeed} km/h`);
+  }
+
+  brake() {
+    this.carSpeed = this.carSpeed - 5;
+    console.log(`${this.carName} is going at ${this.carSpeed} km/h`);
+    return this;
+  }
+
+  get speedUS() {
+    return this.carSpeed / 1.6;
+  }
+
+  set speedUS(speed) {
+    this.carSpeed = speed * 1.6;
+  }
+}
+
+class EVCl extends CarCl {
+  #charge;
+  // Always needs to happen first
+  constructor(carName, carSpeed, charge) {
+    super(carName, carSpeed);
+
+    // Protected
+    this.#charge = charge;
+  }
+  accelerate() {
+    this.carSpeed += 20;
+    this.#charge = this.#charge - this.#charge * 0.01;
+    console.log(
+      `${this.carName} is going at ${
+        this.carSpeed
+      } with a battery charged of ${Math.trunc(this.#charge)}%`
+    );
+    return this;
+  }
+
+  chargeBattery(chargeTo) {
+    this.#charge = chargeTo;
+    return this;
+  }
+}
+const Riv = new EVCl('Rivian', 120, 23);
+Riv.accelerate()
+  .chargeBattery(90)
+  .brake()
+  .accelerate()
+  .brake()
+  .chargeBattery(99)
+  .accelerate();
